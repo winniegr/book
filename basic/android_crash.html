@@ -1,0 +1,288 @@
+<!DOCTYPE HTML>
+<html lang="en-US" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=11; IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+        <title>android crash系统调研 | Android Crash收集系统调研</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 1.5.0">
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+        
+        
+    
+    
+    
+    <link rel="prev" href="../index.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+<link rel="stylesheet" href="../gitbook/style.css">
+
+
+        
+    <div class="book" data-level="1" data-basepath=".." data-revision="1421668143717">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+    	
+    	
+    	
+
+        
+
+        
+    
+        
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../index.html">
+                        <i class="fa fa-check"></i>
+                        
+                         Introduction
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter active" data-level="1" data-path="basic/android_crash.html">
+            
+                
+                    <a href="../basic/android_crash.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                         android crash系统调研
+                    </a>
+                
+            
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="http://www.gitbook.io/" target="blank" class="gitbook-link">Published using GitBook</a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Toggle search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Toggle font settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Toggle share dropdown"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">Twitter</button>
+                <button type="button" data-sharing="google-plus" class="button">Google</button>
+                <button type="button" data-sharing="facebook" class="button">Facebook</button>
+                <button type="button" data-sharing="weibo" class="button">Weibo</button>
+                <button type="button" data-sharing="instapaper" class="button">Instapaper</button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Share on Google Plus"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Share on Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../" >Android Crash收集系统调研</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-gitbook_1">
+                    
+                        <h2 id="android-crash">Android Crash收集系统调研</h2>
+<p>android app经常会发生一些意想不到的crash。为了及时反馈bug，我们需要一个crash收集机制，来让开发人员尽快发现问题，修改bug，完善app。</p>
+<h3 id="crash">crash收集原理</h3>
+<p>java的Thread有一个UncaughtExceptionHandler接口，该接口的主要作用是当Thread发生因未捕获的异常而突然终止时，调用处理程序。接口里有个方法：setDefaultUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh)，方法主要作用为<strong>设置当线程由于未捕获到异常而突然终止，并且没有为该线程定义其他处理程序时所调用的默认处理程序</strong>。</p>
+<h3 id="">第三方库</h3>
+<p>有些商业的</br></p>
+<ol>
+<li>Crittercism</br></li>
+<li>BugsNag</br></li>
+<li>Apphance</br></li>
+<li>Bugsense</br></li>
+</ol>
+<p>还有些开源的</br></p>
+<ol>
+<li>Application Crash Report for Android (ACRA)</br></li>
+<li>crashlystics</br></li>
+<li>Android Remote Stacktrace</br></li>
+<li>DroidDrop</br></li>
+<li>Android Log Collector</br></li>
+<li>友盟</br></li>
+</ol>
+<p>其中，acra和crashlystics是用得比较多的，国内的话用友盟的也比较多。</p>
+<h3 id="acra">ACRA</h3>
+<p>google提供的crash report工具。github的链接<a href="https://github.com/ACRA/acra/wiki/Notice-on-Google-Form-Spreadsheet-usage" target="_blank">戳我</a>.
+最初的版本主要是把crash信息发送到spreadsheet上，但是由于文件大小限制，新的版本将取消发送到spreadsheet这一途径。用户可以将crash信息发送到电子邮箱（个人觉得不靠谱）或者自定义的服务器端。</br>
+ACRA是可配置的，我们可以选择crash信息的发送地，是否弹出toast或者dialog提醒用户，crash信息的字段等。
+ACRA crash report可选的字段有ANDROID_VERSION，PRODUCT，STACK_TRACE，THREAD_DETAILS，TOTAL_MEM_SIZE等，也可以自己定义字段CUSTOM_DATA(自定义键值对，换行分割)。详细的字段可以参见<a href="https://github.com/ACRA/acra/wiki/ReportContent" target="_blank">页面</a></p>
+<p>服务器端代码：</br></p>
+<pre><code>public class CrashTest extends HttpSerlet {
+    private static final long serialVersionUID = 1L;
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        String platformId = request.getParameter(&quot;PLATFORM_ID&quot;);
+        String androidVersion = request.getParameter(&quot;ANDROID_VERSION&quot;);
+        String appVersionCode = request.getParameter(&quot;APP_VERSION_CODE&quot;);
+        String appVersionName = request.getParameter(&quot;APP_VERSION_NAME&quot;);
+        String deviceId = request.getParameter(&quot;DEVICE_ID&quot;);
+        String model = request.getParameter(&quot;MODEL&quot;);
+        String brand = request.getParameter(&quot;BRAND&quot;);
+        String product = request.getParameter(&quot;PRODUCT&quot;);
+        String stackTrace = request.getParameter(&quot;STACK_TRACE&quot;);
+        String crashDate = request.getParameter(&quot;CRASH_DATE&quot;);
+        String packageName = request.getParameter(&quot;PACKAGE_NAME&quot;);
+        StringBuilder sb = new StringBuilder();
+        sb.append(&quot;platformId=&quot; + platformId);
+        sb.append(&quot;,androidVersion=&quot; + androidVersion);
+        sb.append(&quot;,appVersionCode=&quot; + appVersionCode);
+        sb.append(&quot;,appVersionName=&quot; + appVersionName);
+        sb.append(&quot;,deviceId=&quot; + deviceId);
+        sb.append(&quot;,model=&quot; + model);
+        sb.append(&quot;,brand=&quot; + brand);
+        sb.append(&quot;,product=&quot; + product);
+        sb.append(&quot;,stackTrace=&quot; + stackTrace);
+        sb.append(&quot;,crashDate=&quot; + crashDate);
+        sb.append(&quot;,packageName=&quot; + packageName);
+        System.out.println(&quot;CrashTest Post,content =&quot; + sb);
+    }    
+}
+</code></pre><p>ACRA也可以和另一个开源代码<a href="https://github.com/SalomonBrys/ANR-WatchDog" target="_blank">ANR-WatchDog</a>一起用于监测ANR,看了下ANR-WatchDog的源代码，其实就是开了个线程看看5s内主线程有没有对其作出响应。然后如果没有的话就抛出异常，可以用ACRA报告ANR的堆栈信息。个人感觉在release项目加入这个有点得不偿失。
+看了下源代码，基本原理是一样的，程序里设置了setDefaultUncaughtExceptionHandler。</p>
+<h3 id="crashlystics">crashlystics</h3>
+<p>crashlystics被广泛应用于ios和android app应用中。比如沃尔玛，paypal，yelp等。被Twitter收购之后，Crashlytics被集成在fabric中，作为其中的一个feature。在eclipse或android studio里，可以下载个插件，选择好要使用crashlystics的项目之后，它会自动导入crashlystics相关的代码和根据用户名密码生成的key。
+除了没有处理的crash信息，也可以用crashlystics来发送用户已经处理的异常信息。产生的crash可以登录fabric.io从相应的项目中查看。crashlystics按一定的权重（发生的次数，用户数等）先后列出了各个crash条目，每个条目都可以看到crash发生时间线性图，device信息，各个线程的信息等。当然，也可以加入自定义的字段。
+每个crash条目都有一个开关按钮，当crash被解决之后，用户可以close掉响应的crash条目。
+crash信息可以导出到很多流行的社交网站或者工具平台上，比如facebook,github等。</p>
+<h3 id="">分析和结论</h3>
+<p>各种不同的crash收集工具基本原理都类似。只是收集字段上有所区别。点评的客户端已经实现了crash信息收集功能，而且已经包含了主要的信息字段，感觉没必要引入第三方库。一方面，引入第三方库会加入很多不必要的功能，导致apk变大；另一方面，如果真的需要借鉴引入某些字段的话我们自己代码这边也可以获取。</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Introduction"><i class="fa fa-angle-left"></i></a>
+        
+        
+    </div>
+</div>
+
+        
+<script src="../gitbook/app.js"></script>
+
+    
+    <script src="https://cdn.mathjax.org/mathjax/2.4-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-mathjax/plugin.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-livereload/plugin.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
