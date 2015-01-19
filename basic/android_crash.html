@@ -32,7 +32,7 @@
 
 
         
-    <div class="book" data-level="1" data-basepath=".." data-revision="1421668143717">
+    <div class="book" data-level="1" data-basepath=".." data-revision="1421670761573">
     
 
 <div class="book-summary">
@@ -168,7 +168,7 @@
                 <div class="page-inner">
                 
                 
-                    <section class="normal" id="section-gitbook_1">
+                    <section class="normal" id="section-gitbook_2">
                     
                         <h2 id="android-crash">Android Crash收集系统调研</h2>
 <p>android app经常会发生一些意想不到的crash。为了及时反馈bug，我们需要一个crash收集机制，来让开发人员尽快发现问题，修改bug，完善app。</p>
@@ -181,9 +181,7 @@
 <li>BugsNag</br></li>
 <li>Apphance</br></li>
 <li>Bugsense</br></li>
-</ol>
-<p>还有些开源的</br></p>
-<ol>
+<li>还有些开源的</br></li>
 <li>Application Crash Report for Android (ACRA)</br></li>
 <li>crashlystics</br></li>
 <li>Android Remote Stacktrace</br></li>
@@ -239,9 +237,17 @@ ACRA crash report可选的字段有ANDROID_VERSION，PRODUCT，STACK_TRACE，THR
 看了下源代码，基本原理是一样的，程序里设置了setDefaultUncaughtExceptionHandler。</p>
 <h3 id="crashlystics">crashlystics</h3>
 <p>crashlystics被广泛应用于ios和android app应用中。比如沃尔玛，paypal，yelp等。被Twitter收购之后，Crashlytics被集成在fabric中，作为其中的一个feature。在eclipse或android studio里，可以下载个插件，选择好要使用crashlystics的项目之后，它会自动导入crashlystics相关的代码和根据用户名密码生成的key。
-除了没有处理的crash信息，也可以用crashlystics来发送用户已经处理的异常信息。产生的crash可以登录fabric.io从相应的项目中查看。crashlystics按一定的权重（发生的次数，用户数等）先后列出了各个crash条目，每个条目都可以看到crash发生时间线性图，device信息，各个线程的信息等。当然，也可以加入自定义的字段。
-每个crash条目都有一个开关按钮，当crash被解决之后，用户可以close掉响应的crash条目。
-crash信息可以导出到很多流行的社交网站或者工具平台上，比如facebook,github等。</p>
+除了没有处理的crash信息，也可以用crashlystics来发送用户已经处理的异常信息。产生的crash可以登录fabric.io从相应的项目中查看。crashlystics按一定的权重（发生的次数，用户数等）先后列出了各个crash条目，每个条目都可以看到crash发生时间线性图，device信息，各个线程的信息等。当然，也可以加入自定义的字段。</br></p>
+<p><strong>crash report</strong> <br/>
+<img src="../images/crashlystics.png" alt="crashlystics"> </br></p>
+<p><strong>堆栈信息</strong></br>
+<img src="../images/stack.png" alt="stack"> </br></p>
+<p><strong>device信息</strong><br/>
+<img src="../images/device_info.png" alt="device_info">  </br></p>
+<p>每个crash条目都有一个开关按钮，当crash被解决之后，用户可以close掉响应的crash条目。
+<img src="../images/close_button.png" alt="close_button"> </br></p>
+<p>crash信息可以导出到很多流行的社交网站或者工具平台上，比如facebook,github等。
+<img src="../images/crashlystics_share.png" alt="crashlystics_share"> </br></p>
 <h3 id="">分析和结论</h3>
 <p>各种不同的crash收集工具基本原理都类似。只是收集字段上有所区别。点评的客户端已经实现了crash信息收集功能，而且已经包含了主要的信息字段，感觉没必要引入第三方库。一方面，引入第三方库会加入很多不必要的功能，导致apk变大；另一方面，如果真的需要借鉴引入某些字段的话我们自己代码这边也可以获取。</p>
 
